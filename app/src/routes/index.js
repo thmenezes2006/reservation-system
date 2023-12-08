@@ -18,6 +18,11 @@ const router = new Router({
       redirect: "/home",
     },
     {
+      path: "/login",
+      name: "BpLogin",
+      component: () => import("../views/BpLogin.vue"),
+    },
+    {
       path: "/home",
       name: "HomePage",
       component: () => import("../views/HomePage.vue"),

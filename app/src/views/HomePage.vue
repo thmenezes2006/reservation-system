@@ -1,12 +1,6 @@
 <template>
   <div class="w-full mt-5 text-center">
-    <div>
-      <img
-        class="w-1/2 sm:w-1/4 lg:w-1/5"
-        src="../../public/img/logo-bpseguradora.svg"
-        alt="logo-bem-protege-seguradora"
-      />
-    </div>
+    <div></div>
 
     <FormUser />
   </div>
