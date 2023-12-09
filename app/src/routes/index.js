@@ -15,7 +15,7 @@ const router = new Router({
   routes: [
     {
       path: "*",
-      redirect: "/home",
+      redirect: "/login",
     },
     {
       path: "/login",
@@ -23,9 +23,9 @@ const router = new Router({
       component: () => import("../views/BpLogin.vue"),
     },
     {
-      path: "/home",
-      name: "HomePage",
-      component: () => import("../views/HomePage.vue"),
+      path: "/cadastro",
+      name: "Cadastro",
+      component: () => import("../views/RegisterUser.vue"),
     },
     {
       path: "/pagina2",
@@ -34,5 +34,4 @@ const router = new Router({
     },
   ],
 });
-
 export default router;

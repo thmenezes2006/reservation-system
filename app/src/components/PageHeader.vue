@@ -47,7 +47,11 @@ export default {
           path: "/home",
         },
         {
-          title: "Login",
+          title: "Cadastro",
+          path: "/cadastro",
+        },
+        {
+          title: "Área do Consultor",
           path: "/login",
         },
       ],
