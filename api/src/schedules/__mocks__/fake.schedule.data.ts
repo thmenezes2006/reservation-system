@@ -2,7 +2,7 @@ import { Schedule } from "../models/schedule.model"
 import { Types } from "mongoose";
 
 export const fakeId = "632130d41623c49bf7b1c7e9";
-export const fakeBookData: Schedule[] = [
+export const fakeScheduleData: Schedule[] = [
     {
         idBeneficiario: new Types.ObjectId(),
         idRepresentante: new Types.ObjectId(),
@@ -36,7 +36,7 @@ export const fakeBookData: Schedule[] = [
         updatedAt: new Date()
     }
 ]
-export const updatedBook: Schedule = {
+export const updatedSchedule: Schedule = {
     idBeneficiario: new Types.ObjectId(),
     idRepresentante: new Types.ObjectId(),
     dateAndHourStart: new Date('2023-12-15T10:30'),

@@ -19,6 +19,15 @@ export class ScheduleService {
         }
     }
 
+    async getAllByUser(user: string): Promise<Schedule[] | CustomErrors> {
+        try {
+            const schedules = await this.scheduleRepository.getAllByUser(user);
+            return schedules;
+        } catch (error) {
+            return promiseError(error);
+        }
+    }
+
     async getById(id: string): Promise<Schedule | CustomErrors> {
         if (!isIdValid(id)) {
             return invalidIdError(id);

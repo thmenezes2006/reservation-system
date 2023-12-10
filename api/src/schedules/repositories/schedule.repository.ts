@@ -10,6 +10,12 @@ export class ScheduleRepository {
         return schedules;
     }
 
+    async getAllByUser(user: string): Promise<Schedule[]> {
+        const schedules = await this.scheduleModel.find({ user: user });
+
+        return schedules;
+    }
+
     async getById(id: string): Promise<Schedule> {
         const schedule = await this.scheduleModel.findById(id);
 
