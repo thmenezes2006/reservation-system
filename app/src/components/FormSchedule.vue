@@ -2,20 +2,25 @@
   <div>
     <h1>Sistema de Agendamentos</h1>
     <div class="flex justify-center">
-      <div class="cardForm sm:w-2/3 w-full">
+      <div :class="`cardForm ${isClient ? 'sm:w-2/3' : 'sm:w-1/3'} w-full`">
         <div class="row mt-2 pb-3">
           <div class="sm:pt-10 pt-5 sm:flex flex-wrap">
             <vs-input
               color="rgb(2, 11, 170)"
               size="large"
               type="email"
-              class="md:w-1/2 w-full px-2 pb-3"
+              :class="`${isClient ? 'md:w-1/2' : ''} w-full px-2 pb-3`"
               label-placeholder="Email"
               v-model="$v.userMail.$model"
+              :disabled="isClient"
               :danger="$v.userMail.$error"
               danger-text="exemplo@bemprotege.com.br"
+              @change="confirmUser({ userMail })"
             ></vs-input>
-            <div class="flex flex-wrap md:w-1/2 w-full px-2 pb-3">
+            <div
+              v-if="isClient"
+              class="flex flex-wrap md:w-1/2 w-full px-2 pb-3"
+            >
               <vs-input
                 color="rgb(2, 11, 170)"
                 size="large"
@@ -50,7 +55,10 @@
           </div>
         </div>
         <div class="row"></div>
-        <div class="row flex sm:justify-end jusfify-between gap-3">
+        <div
+          v-if="isClient"
+          class="row flex sm:justify-end jusfify-between gap-3"
+        >
           <vs-button
             type="gradient"
             class="sm:w-1/6 w-2/5"
@@ -69,10 +77,41 @@
         </div>
       </div>
     </div>
+    <vs-alert
+      :active.sync="modalUserRegistred"
+      :color="`${isRegistred ? 'warning' : 'primary'}`"
+      close-icon="close"
+      class="p-3"
+    >
+      <div class="my-3" v-if="isRegistred">
+        <h3 class="mb-3">
+          Olá {{ userSchedule.userName.toUpperCase() }}, agendamento não
+          permitido, ao clicar em "Ir" direcionaremos para o ambiente exclusivo
+          para representantes!
+        </h3>
+        <vs-button
+          class="my-3 px-10 text-right"
+          color="warning"
+          type="gradient"
+          to="/login"
+          >Ir</vs-button
+        >
+      </div>
+      <div class="my-3" v-else>
+        <h3 class="mb-3">
+          Olá, seja bem-vindo, você ainda não tem cadastro, para realiza-lo
+          clique em "Ok"!
+        </h3>
+        <vs-button class="my-3 px-10" type="gradient" to="/cadastro"
+          >Ok</vs-button
+        >
+      </div>
+    </vs-alert>
   </div>
 </template>
 
 <script>
+import Users from "../services/Users";
 import moment from "moment";
 import { required, email } from "vuelidate/lib/validators";
 export default {
@@ -102,6 +141,22 @@ export default {
       ],
       dateAndHourStart: "",
       dateAndHourFinish: "",
+      modalUserRegistred: false,
+      isRegistred: false,
+      isClient: false,
+      userSchedule: {
+        typeUser: null,
+        updatedAt: null,
+        userAddress: null,
+        userAddressCity: null,
+        userAddressNeighborhood: null,
+        userAddressNumber: null,
+        userAddressState: null,
+        userCpf: null,
+        userMail: null,
+        userName: null,
+        _id: null,
+      },
     };
   },
   validations: {
@@ -123,9 +178,12 @@ export default {
   methods: {
     resetForm() {
       this.userMail = "";
-      (this.serviceStartHour = ""),
-        (this.serviceDate = ""),
-        (this.serviceDuration = "");
+      this.serviceStartHour = "";
+      this.serviceDate = "";
+      this.serviceDuration = "";
+      this.modalUserRegistred = false;
+      this.isRegistred = false;
+      this.isClient = false;
     },
     submit() {
       console.log("tesfajlj");
@@ -151,6 +209,48 @@ export default {
         this.dateAndHourStart,
         this.dateAndHourFinish
       );
+    },
+
+    preencheForm(dados) {
+      this.userSchedule = dados;
+    },
+
+    confirmUser(obj) {
+      // this.$v.$touch();
+      // if (this.$v.$invalid) {
+      //   this.$vs.notify({
+      //     title: "Atenção",
+      //     text: "Por favor, preencha todos os campos corretamente para continuar!",
+      //     color: "danger",
+      //     position: "top-center",
+      //   });
+      //   return;
+      // }
+
+      this.getUserWhere(obj).then((res) => {
+        const { data } = res;
+        if (data.length === 0) {
+          this.isRegistred = false;
+          this.modalUserRegistred = true;
+          return;
+        }
+        this.preencheForm(data[0]);
+        if (this.userSchedule.typeUser === "representante") {
+          this.isRegistred = true;
+          this.modalUserRegistred = true;
+          return;
+        }
+        this.isClient = true;
+      });
+    },
+
+    async getUserWhere(obj) {
+      try {
+        const result = await Users.getWhere(obj);
+        return result;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

@@ -32,6 +32,15 @@ export class UserService {
         }
     }
 
+    async getWhere(where: { field: string, value: string }): Promise<User[] | CustomErrors> {
+        try {
+            const users = await this.userRepository.getWhere(where);
+            return users;
+        } catch (error) {
+            return promiseError(error);
+        }
+    }
+
     async create(user: User): Promise<User | CustomErrors> {
         try {
             const formateedUser = { ...user };

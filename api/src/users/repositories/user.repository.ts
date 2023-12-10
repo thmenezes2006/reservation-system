@@ -10,20 +10,22 @@ export class UserRepository {
     return users;
   }
 
-  async getAllByAuthor(autor: string): Promise<User[]> {
-    const users = await this.userModel.find({ autor: autor });
-
-    return users;
-  }
-
   async getById(id: string): Promise<User> {
-    const user = await this.userModel.findById(id).populate('resenha');
-
+    const user = await this.userModel.findById(id)
     if (user === null) {
       return {} as User;
     }
 
     return user;
+  }
+
+  async getWhere(where: { field: string, value: string }): Promise<User[]> {
+
+    const query: { [key: string]: string } = {};
+    query[where.field] = where.value;
+    const users = await this.userModel.find(query)
+
+    return users;
   }
 
   async create(user: User): Promise<User> {

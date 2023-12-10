@@ -35,6 +35,22 @@ export class UserController {
         return res.status(StatusCode.OK).json(result);
     }
 
+    async getWhere(req: Request, res: Response) {
+        const { field, value } = req.params;
+
+        const result = await this.userService.getWhere({ field, value });
+
+        if ("invalidIdError" in result) {
+            return res.status(StatusCode.BAD_REQUEST).json(result);
+        }
+
+        if ("promiseError" in result) {
+            return res.status(StatusCode.INTERNAL_SERVER_ERROR).json(result);
+        }
+
+        return res.status(StatusCode.OK).json(result);
+    }
+
     async create(req: Request, res: Response) {
         const { body } = req;
 
