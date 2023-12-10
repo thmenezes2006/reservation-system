@@ -6,6 +6,19 @@ import { fakeUserData } from "../__mocks__/fake.user.data";
 export class UserController {
     constructor(private readonly userService: UserService) { }
 
+    async getAll(req: Request, res: Response) {
+        const { body } = req
+        console.log(body);
+
+        const result = await this.userService.getAll();
+
+        if ("promiseError" in result) {
+            return res.status(StatusCode.INTERNAL_SERVER_ERROR).json(result);
+        }
+
+        return res.status(StatusCode.OK).json(result);
+    }
+
     async getById(req: Request, res: Response) {
         const { id } = req.params;
 
