@@ -6,19 +6,14 @@
       alt="logo-bem-protege-seguradora"
     />
     <div class="sm:flex gap-3 m-4 px-3 items-center hidden">
-      <vs-chip
-        class="rounded"
-        transparent
-        color="primary"
-        :key="index"
-        v-for="(item, index) in routerPaths"
-      >
-        <router-link
-          class="p-2 text-base text-blue-900 font-bold"
+      <div :key="index" v-for="(item, index) in routerPaths">
+        <vs-button
+          type="gradient"
+          class="lg:py-3 py-2 text-base"
           :to="item.path"
-          >{{ item.title }}</router-link
+          >{{ item.title }}</vs-button
         >
-      </vs-chip>
+      </div>
     </div>
     <vs-dropdown class="mr-2 sm:hidden" vs-trigger-click>
       <vs-button class="btn-drop" type="flat" icon="menu"></vs-button>
@@ -51,7 +46,7 @@ export default {
           path: "/cadastro",
         },
         {
-          title: "Área do Consultor",
+          title: "Área do Representante",
           path: "/login",
         },
       ],

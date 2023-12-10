@@ -11,8 +11,8 @@
                 >Beneficário</vs-radio
               >
 
-              <vs-radio v-model="typeUser" vs-value="consultor"
-                >Consultor</vs-radio
+              <vs-radio v-model="typeUser" vs-value="representante"
+                >Representante</vs-radio
               >
             </div>
           </div>
@@ -20,76 +20,106 @@
         <div v-if="typeUser" class="row">
           <div class="sm:pt-10 pt-5 sm:flex flex-wrap">
             <vs-input
+              color="rgb(2, 11, 170)"
               size="large"
               :class="`${
-                typeUser === 'consultor' ? 'sm:w-1/3' : 'sm:w-1/2'
+                typeUser === 'representante' ? 'sm:w-1/3' : 'sm:w-1/2'
               }  w-full px-2 pb-3`"
               class="sm:w-1/2 w-full px-2 pb-3"
               label-placeholder="Nome Completo"
-              v-model="userName"
+              v-model="$v.userName.$model"
+              :danger="$v.userName.$error"
+              danger-text="Informação obrigatória"
             ></vs-input>
             <vs-input
-              v-if="typeUser === 'consultor'"
+              color="rgb(2, 11, 170)"
+              v-if="typeUser === 'representante'"
               size="large"
               class="sm:w-1/3 w-full px-2 pb-3"
               label-placeholder="Cpf"
-              v-model="userCpf"
+              v-model="$v.userCpf.$model"
+              :danger="$v.userCpf.$error"
+              danger-text="Informação obrigatória"
             ></vs-input>
             <vs-input
+              color="rgb(2, 11, 170)"
               size="large"
               :class="`${
-                typeUser === 'consultor' ? 'sm:w-1/3' : 'sm:w-1/2'
+                typeUser === 'representante' ? 'sm:w-1/3' : 'sm:w-1/2'
               }  w-full px-2 pb-3`"
               type="email"
               label-placeholder="Email"
-              v-model="userMail"
+              v-model="$v.userMail.$model"
+              :danger="$v.userMail.$error"
+              danger-text="exemplo@bemprotege.com.br"
             ></vs-input>
             <vs-input
+              color="rgb(2, 11, 170)"
               size="large"
               class="sm:w-2/5 w-full px-2 pb-3"
               label-placeholder="Endereço"
-              v-model="userAddress"
+              v-model="$v.userAddress.$model"
+              :danger="$v.userAddress.$error"
+              danger-text="Informação obrigatória"
             ></vs-input>
             <vs-input
+              color="rgb(2, 11, 170)"
               size="large"
               type="number"
               class="sm:w-1/5 w-full px-2 pb-3"
               label-placeholder="Número"
-              v-model="userAddressNumber"
+              v-model="$v.userAddressNumber.$model"
+              :danger="$v.userAddressNumber.$error"
+              danger-text="Informação obrigatória"
             ></vs-input>
             <vs-input
+              color="rgb(2, 11, 170)"
               size="large"
               class="sm:w-2/5 w-full px-2 pb-3"
               label-placeholder="Bairro"
-              v-model="userAddressNeighborhood"
+              v-model="$v.userAddressNeighborhood.$model"
+              :danger="$v.userAddressNeighborhood.$error"
+              danger-text="Informação obrigatória"
             ></vs-input>
             <vs-input
+              color="rgb(2, 11, 170)"
               size="large"
               class="sm:w-1/3 w-full px-2 pb-3"
               label-placeholder="Cidade"
-              v-model="userAddressCity"
+              v-model="$v.userAddressCity.$model"
+              :danger="$v.userAddressCity.$error"
+              danger-text="Informação obrigatória"
             ></vs-input>
             <vs-input
+              color="rgb(2, 11, 170)"
               size="large"
               class="sm:w-1/6 w-full px-2 pb-3"
               label-placeholder="Estado"
-              v-model="userAddressState"
+              v-model="$v.userAddressState.$model"
+              :danger="$v.userAddressState.$error"
+              danger-text="Informação obrigatória"
             ></vs-input>
             <vs-input
-              v-if="typeUser === 'consultor'"
+              color="rgb(2, 11, 170)"
+              v-if="typeUser === 'representante'"
               size="large"
               type="password"
               class="sm:w-1/4 w-full px-2 pb-3"
               label-placeholder="Senha"
-              v-model="userPassword"
+              v-model="$v.userPassword.$model"
+              :danger="$v.userPassword.$error"
+              danger-text="Mínimo de 8 caractéres"
             ></vs-input>
             <vs-input
-              v-if="typeUser === 'consultor'"
+              color="rgb(2, 11, 170)"
+              v-if="typeUser === 'representante'"
               size="large"
               type="password"
               class="sm:w-1/4 w-full px-2 pb-3"
               label-placeholder="Confirmação de Senha"
-              v-model="confirmUserPassword"
+              v-model="$v.confirmUserPassword.$model"
+              :danger="$v.confirmUserPassword.$error"
+              danger-text="As senhas devem ser iguais"
             ></vs-input>
           </div>
         </div>
@@ -98,13 +128,18 @@
           class="row pt-7 flex sm:justify-end jusfify-between gap-3"
         >
           <vs-button
-            class="sm:w-1/6 w-2/5"
+            type="gradient"
+            class="xl:w-1/12 sm:w-1/6 w-2/5"
             @click.stop.prevent="resetForm"
             color="warning"
             >Limpar</vs-button
           >
           <div class="sm:hidden w-1/5"></div>
-          <vs-button class="sm:w-1/6 w-2/5" color="success"
+          <vs-button
+            type="gradient"
+            class="xl:w-1/12 sm:w-1/6 w-2/5"
+            @click="submitForm"
+            color="primary"
             >Cadastrar</vs-button
           >
         </div>
@@ -114,12 +149,20 @@
 </template>
 
 <script>
+import {
+  required,
+  email,
+  minLength,
+  maxLength,
+  sameAs,
+} from "vuelidate/lib/validators";
 export default {
   data() {
     return {
       typeUser: null,
       userName: "",
       userMail: "",
+      userCpf: "",
       userAddress: "",
       userAddressNumber: "",
       userAddressNeighborhood: "",
@@ -128,6 +171,45 @@ export default {
       userPassword: "",
       confirmUserPassword: "",
     };
+  },
+  validations: {
+    userName: {
+      required,
+      minLength: minLength(5),
+    },
+    userMail: {
+      required,
+      email,
+    },
+    userAddress: {
+      required,
+      minLength: minLength(5),
+    },
+    userCpf: {
+      required,
+      minLength: minLength(11),
+      maxLength: maxLength(14),
+    },
+    userAddressNumber: {
+      required,
+    },
+    userAddressNeighborhood: {
+      required,
+    },
+    userAddressCity: {
+      required,
+    },
+    userAddressState: {
+      required,
+    },
+    userPassword: {
+      required,
+      minLength: minLength(8),
+    },
+    confirmUserPassword: {
+      required,
+      sameAsPassword: sameAs("userPassword"),
+    },
   },
   methods: {
     resetForm() {
@@ -140,6 +222,18 @@ export default {
         (this.userAddressState = ""),
         (this.userPassword = "");
       this.confirmUserPassword = "";
+    },
+    submitForm() {
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.$vs.notify({
+          title: "Atenção",
+          text: "Por favor, preencha todos os campos para continuar!",
+          color: "danger",
+          position: "top-center",
+        });
+        return;
+      }
     },
   },
 };

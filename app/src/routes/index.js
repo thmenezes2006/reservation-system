@@ -28,9 +28,9 @@ const router = new Router({
       component: () => import("../views/RegisterUser.vue"),
     },
     {
-      path: "/pagina2",
-      name: "pag",
-      component: () => import("../views/TesteRoute.vue"),
+      path: "/home",
+      name: "Home",
+      component: () => import("../views/HomePage.vue"),
     },
   ],
 });
