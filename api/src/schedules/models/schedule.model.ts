@@ -9,7 +9,6 @@ const scheduleSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-
     dateAndHourStart: {
         type: Date,
         required: true

@@ -7,8 +7,6 @@ export class UserController {
     constructor(private readonly userService: UserService) { }
 
     async getAll(req: Request, res: Response) {
-        const { body } = req
-        console.log(body);
 
         const result = await this.userService.getAll();
 

@@ -45,6 +45,8 @@ export class UserService {
         try {
             const formateedUser = { ...user };
             const newUser = await this.userRepository.create(formateedUser);
+            console.log('newUsxe', newUser);
+
             return newUser;
         } catch (error) {
             return promiseError(error);
