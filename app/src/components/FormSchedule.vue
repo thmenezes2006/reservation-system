@@ -15,7 +15,6 @@
               :disabled="isClient"
               :danger="$v.userMail.$error"
               danger-text="exemplo@bemprotege.com.br"
-              @change="confirmUser({ userMail })"
             ></vs-input>
             <div
               v-if="isClient"
@@ -27,14 +26,14 @@
                 type="date"
                 class="xl:w-1/3 w-full px-2 mb-4"
                 label="Data do atendimento"
-                v-model="$v.serviceDate.$model"
+                v-model="serviceDate"
               ></vs-input>
               <vs-input
                 color="rgb(2, 11, 170)"
                 size="large"
                 class="xl:w-1/3 w-1/2 px-2"
                 label="Hora início"
-                v-model="$v.serviceStartHour.$model"
+                v-model="serviceStartHour"
                 v-mask="'##:##'"
                 placeholder="HH:mm"
               ></vs-input>
@@ -56,10 +55,12 @@
         </div>
         <div class="row"></div>
         <div
-          v-if="isClient"
-          class="row flex sm:justify-end jusfify-between gap-3"
+          :class="`row flex sm:justify-end ${
+            isClient ? 'jusfify-between' : 'justify-end'
+          } gap-3`"
         >
           <vs-button
+            v-if="isClient"
             type="gradient"
             class="sm:w-1/6 w-2/5"
             @click.stop.prevent="resetForm"
@@ -69,8 +70,8 @@
           <div class="sm:hidden w-1/5"></div>
           <vs-button
             type="gradient"
-            class="sm:w-1/6 w-2/5"
-            @click.stop.prevent="meetStartAndFinishTime"
+            :class="`${isClient ? 'lg:w-1/6' : 'lg:w-1/4'} w-2/5`"
+            @click.stop.prevent="schedulesSteps()"
             color="primary"
             >Continuar</vs-button
           >
@@ -117,10 +118,10 @@ import { required, email } from "vuelidate/lib/validators";
 export default {
   data() {
     return {
-      userMail: "",
-      serviceDate: "",
-      serviceStartHour: "",
-      serviceDuration: "",
+      userMail: null,
+      serviceDate: null,
+      serviceStartHour: null,
+      serviceDuration: null,
       arrayServiceDuration: [
         {
           text: "30 minutos",
@@ -139,8 +140,12 @@ export default {
           value: "120",
         },
       ],
-      dateAndHourStart: "",
-      dateAndHourFinish: "",
+      formSubmit: {
+        idBeneficiario: null,
+        idRepresentante: null,
+        dateAndHourStart: null,
+        dateAndHourFinish: null,
+      },
       modalUserRegistred: false,
       isRegistred: false,
       isClient: false,
@@ -164,23 +169,13 @@ export default {
       required,
       email,
     },
-    serviceDate: {
-      required,
-    },
-
-    serviceStartHour: {
-      required,
-    },
-    serviceDuration: {
-      required,
-    },
   },
   methods: {
     resetForm() {
-      this.userMail = "";
-      this.serviceStartHour = "";
-      this.serviceDate = "";
-      this.serviceDuration = "";
+      this.userMail = null;
+      this.serviceStartHour = null;
+      this.serviceDate = null;
+      this.serviceDuration = null;
       this.modalUserRegistred = false;
       this.isRegistred = false;
       this.isClient = false;
@@ -189,59 +184,52 @@ export default {
       console.log("tesfajlj");
     },
     meetStartAndFinishTime() {
-      this.$v.$touch();
+      const dateWithHour = this.serviceDate + "T" + this.serviceStartHour;
+      this.formSubmit.idBeneficiario = this.userSchedule._id;
+      this.formSubmit.dateAndHourStart =
+        moment(dateWithHour).format("YYYY-MM-DDTHH:mm");
+      this.formSubmit.dateAndHourFinish = moment(this.dateAndHourStart)
+        .add(this.serviceDuration, "m")
+        .format("YYYY-MM-DDTHH:mm");
+      console.log(this.dateAndHourStart, this.dateAndHourFinish);
+    },
+
+    confirmUser(obj) {
       if (this.$v.$invalid) {
         this.$vs.notify({
           title: "Atenção",
-          text: "Por favor, preencha todos os campos para continuar!",
+          text: "Por favor, digite o email usado no cadastro!",
           color: "danger",
           position: "top-center",
         });
         return;
       }
-      const dateWithHour = this.serviceDate + "T" + this.serviceStartHour;
-      this.dateAndHourStart = moment(dateWithHour).format("YYYY-MM-DDTHH:mm");
-      this.dateAndHourFinish = moment(this.dateAndHourStart)
-        .add(this.serviceDuration, "m")
-        .format("YYYY-MM-DDTHH:mm");
-      console.log(
-        "depoisMoment",
-        this.dateAndHourStart,
-        this.dateAndHourFinish
-      );
-    },
-
-    preencheForm(dados) {
-      this.userSchedule = dados;
-    },
-
-    confirmUser(obj) {
-      // this.$v.$touch();
-      // if (this.$v.$invalid) {
-      //   this.$vs.notify({
-      //     title: "Atenção",
-      //     text: "Por favor, preencha todos os campos corretamente para continuar!",
-      //     color: "danger",
-      //     position: "top-center",
-      //   });
-      //   return;
-      // }
-
+      this.$vs.loading();
       this.getUserWhere(obj).then((res) => {
         const { data } = res;
         if (data.length === 0) {
           this.isRegistred = false;
           this.modalUserRegistred = true;
+          this.$vs.loading.close();
           return;
         }
-        this.preencheForm(data[0]);
+
+        this.userSchedule = data[0];
         if (this.userSchedule.typeUser === "representante") {
           this.isRegistred = true;
           this.modalUserRegistred = true;
+          this.$vs.loading.close();
           return;
         }
         this.isClient = true;
+        this.$vs.loading.close();
       });
+    },
+
+    schedulesSteps() {
+      this.isClient
+        ? this.meetStartAndFinishTime()
+        : this.confirmUser({ userMail: this.userMail });
     },
 
     async getUserWhere(obj) {
@@ -249,7 +237,7 @@ export default {
         const result = await Users.getWhere(obj);
         return result;
       } catch (error) {
-        console.log(error);
+        throw new Error(error);
       }
     },
   },
