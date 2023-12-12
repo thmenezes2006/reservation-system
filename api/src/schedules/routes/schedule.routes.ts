@@ -7,5 +7,4 @@ const schedulesRoutes = express.Router();
 schedulesRoutes.get("/", schedule.getAll.bind(schedule));
 schedulesRoutes.get("/:id", schedule.getById.bind(schedule));
 schedulesRoutes.post("/", schedule.create.bind(schedule));
-
 export default schedulesRoutes;

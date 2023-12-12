@@ -1,4 +1,4 @@
-import { User } from "../models/user.model";
+import { DateSchedule, User } from "../models/user.model";
 import { Model } from "mongoose";
 
 export class UserRepository {
@@ -47,6 +47,51 @@ export class UserRepository {
     return updatedUser;
   }
 
+  async findAvailableConsultant(schedule: DateSchedule): Promise<any> {
+    const consultants = await this.userModel.aggregate([
+      {
+        $match: {
+          typeUser: 'representante',
+        },
+      },
+      {
+        $lookup: {
+          from: 'schedules',
+          localField: '_id',
+          foreignField: 'idRepresentante',
+          as: 'schedules',
+        },
+      },
+      {
+        $match: {
+          $or: [
+            {
+              schedules: { $size: 0 },
+            },
+            {
+              schedules: {
+                $not: {
+                  $elemMatch: {
+                    $and: [
+                      { dateAndHourStart: { $lte: schedule.dateAndHourFinish } },
+                      { dateAndHourFinish: { $gte: schedule.dateAndHourStart } },
+                    ],
+                  },
+                },
+              },
+            },
+          ],
+        },
+      },
 
+    ]);
+
+
+    if (consultants === null) {
+      return {} as User;
+    }
+
+    return consultants;
+  }
 
 }

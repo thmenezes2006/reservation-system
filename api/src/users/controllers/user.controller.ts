@@ -1,6 +1,7 @@
 import { UserService } from "../services/user.service";
 import { StatusCode } from "../../utils/status.code";
 import { Request, Response } from "express";
+import { DateSchedule } from "../models/user.model";
 import { fakeUserData } from "../__mocks__/fake.user.data";
 
 export class UserController {
@@ -78,4 +79,23 @@ export class UserController {
         return res.status(StatusCode.OK).json(result);
     }
 
+    async findAvailableConsultant(req: Request, res: Response) {
+        const { params } = req;
+        console.log('params', params)
+        const schedule: DateSchedule = {
+            dateAndHourStart: params.startSchedule,
+            dateAndHourFinish: params.finishSchedule,
+        }
+        const result = await this.userService.findAvailableConsultant(schedule);
+
+        if ("invalidIdError" in result) {
+            return res.status(StatusCode.BAD_REQUEST).json(result);
+        }
+
+        if ("promiseError" in result) {
+            return res.status(StatusCode.INTERNAL_SERVER_ERROR).json(result);
+        }
+
+        return res.status(StatusCode.OK).json(result);
+    }
 }

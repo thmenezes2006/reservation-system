@@ -1,4 +1,4 @@
-import { User } from "../models/user.model";
+import { User, DateSchedule } from "../models/user.model";
 import { UserRepository } from "../repositories/user.repository";
 import {
     CustomErrors,
@@ -63,6 +63,17 @@ export class UserService {
             return updatedUser;
         } catch (error) {
             return promiseError(error);
+        }
+    }
+    async findAvailableConsultant(schedule: DateSchedule): Promise<User[] | CustomErrors> {
+        try {
+
+            const representantesSemRegistros = await this.userRepository.findAvailableConsultant(schedule);
+
+            return representantesSemRegistros;
+        } catch (error) {
+            console.error('Erro ao encontrar representantes sem registros:', error);
+            throw error;
         }
     }
 }

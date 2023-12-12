@@ -10,11 +10,11 @@ const scheduleSchema = new Schema({
         ref: 'User'
     },
     dateAndHourStart: {
-        type: Date,
+        type: String,
         required: true
     },
     dateAndHourFinish: {
-        type: Date,
+        type: String,
         required: true,
     },
 },

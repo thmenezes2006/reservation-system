@@ -52,35 +52,4 @@ export class ScheduleService {
     }
 
 
-    async findAvailableConsultant(schedule: Schedule): Promise<Schedule | CustomErrors> {
-        try {
-
-            const representantesSemRegistros = await schedule.aggregate([
-                {
-                    $match: {
-                        $or: [
-                            { dateAndHourStart: { $gt: schedule.dateAndHourFinish } },
-                            { dateAndHourFinish: { $lt: schedule.dateAndHourStart } }
-                        ]
-                    }
-                },
-                {
-                    $group: {
-                        _id: '$idRepresentante'
-                    }
-                }
-            ]);
-
-            // Obter os IDs dos representantes sem registros
-            const representantesSemRegistrosIds = representantesSemRegistros.map((representante: { _id: string; }) => representante._id);
-
-            console.log('IDs dos representantes sem registros:', representantesSemRegistrosIds);
-
-            return representantesSemRegistrosIds;
-        } catch (error) {
-            console.error('Erro ao encontrar representantes sem registros:', error);
-            throw error;
-        }
-    }
-
 }

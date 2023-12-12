@@ -14,5 +14,10 @@ export default {
     create: async (obj) => {
         const user = await http.post(`/users`, obj)
         return user
+    },
+    findAvailableConsultant: async (obj) => {
+        console.log(obj.dateAndHourStart);
+        const users = await http.get(`/users/findAvailableConsultant/${obj.dateAndHourStart}/${obj.dateAndHourStart}`)
+        return users
     }
 }

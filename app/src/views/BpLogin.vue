@@ -1,7 +1,7 @@
 <template>
   <div class="w-full mt-5 text-center">
     <div>
-      <h1 class="mt-3">Sistema de Agendamentos</h1>
+      <h1 class="mt-3">Login</h1>
       <div class="text-left">
         <span>Email</span>
         <vs-input

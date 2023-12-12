@@ -1,6 +1,12 @@
 import { Schema, model, Model, InferSchemaType } from "mongoose";
 
+export interface DateSchedule {
+    dateAndHourStart: string,
+    dateAndHourFinish: string
+}
+
 const userSchema = new Schema({
+
     typeUser: {
         type: String,
         required: true,
@@ -42,6 +48,7 @@ const userSchema = new Schema({
     userPassword: {
         type: String,
     },
+
 },
     {
         timestamps: true,
