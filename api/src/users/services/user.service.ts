@@ -6,6 +6,7 @@ import {
     promiseError,
 } from "../../utils/error.handler";
 import { isIdValid } from "../../utils/id.validator";
+import { hash } from "bcrypt";
 
 export class UserService {
     constructor(private readonly userRepository: UserRepository) { }
@@ -44,8 +45,10 @@ export class UserService {
     async create(user: User): Promise<User | CustomErrors> {
         try {
             const formateedUser = { ...user };
+            if (formateedUser.userPassword) {
+                formateedUser.userPassword = await hash(formateedUser.userPassword, 5)
+            }
             const newUser = await this.userRepository.create(formateedUser);
-            console.log('newUsxe', newUser);
 
             return newUser;
         } catch (error) {

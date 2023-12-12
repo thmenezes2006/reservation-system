@@ -208,15 +208,14 @@ export default {
       this.isRegistred = false;
       this.isClient = false;
     },
-    submit() {
-      console.log("tesfajlj");
-    },
     async meetStartAndFinishTime() {
       const dateWithHour = this.serviceDate + "T" + this.serviceStartHour;
       this.formSubmit.idBeneficiario = this.userSchedule._id;
       this.formSubmit.dateAndHourStart =
         moment(dateWithHour).format("YYYY-MM-DDTHH:mm");
-      this.formSubmit.dateAndHourFinish = moment(this.dateAndHourStart)
+      this.formSubmit.dateAndHourFinish = moment(
+        this.formSubmit.dateAndHourStart
+      )
         .add(this.serviceDuration, "m")
         .format("YYYY-MM-DDTHH:mm");
       try {

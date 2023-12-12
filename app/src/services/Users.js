@@ -16,7 +16,6 @@ export default {
         return user
     },
     findAvailableConsultant: async (obj) => {
-        console.log(obj.dateAndHourStart);
         const users = await http.get(`/users/findAvailableConsultant/${obj.dateAndHourStart}/${obj.dateAndHourStart}`)
         return users
     }

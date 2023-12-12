@@ -39,6 +39,7 @@
               size="large"
               class="sm:w-1/3 w-full px-2 pb-3"
               label-placeholder="Cpf"
+              v-mask="'###.###.###-##'"
               v-model="$v.formSubmit.userCpf.$model"
               :danger="$v.formSubmit.userCpf.$error"
               danger-text="Informação obrigatória"
@@ -155,13 +156,7 @@
 <script>
 import router from "../routes/index";
 import User from "../services/Users";
-import {
-  required,
-  email,
-  minLength,
-  maxLength,
-  sameAs,
-} from "vuelidate/lib/validators";
+import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
 
 export default {
   data() {
@@ -229,8 +224,7 @@ export default {
           },
           userCpf: {
             required,
-            minLength: minLength(11),
-            maxLength: maxLength(14),
+            minLength: minLength(14),
           },
           userAddressNumber: {
             required,
