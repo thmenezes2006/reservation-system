@@ -222,6 +222,7 @@ export default {
         this.$vs.loading();
         const result = await Users.findAvailableConsultant(this.formSubmit);
         const { data } = result;
+        this.availableConsultants = [];
         if (data.length > 0) {
           this.$vs.loading.close();
           this.availableConsultants = data;

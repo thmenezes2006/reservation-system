@@ -16,7 +16,7 @@ export default {
         return user
     },
     findAvailableConsultant: async (obj) => {
-        const users = await http.get(`/users/findAvailableConsultant/${obj.dateAndHourStart}/${obj.dateAndHourStart}`)
+        const users = await http.get(`/users/findAvailableConsultant/${obj.dateAndHourStart}/${obj.dateAndHourFinish}`)
         return users
     }
 }
