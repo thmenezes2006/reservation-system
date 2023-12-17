@@ -225,7 +225,6 @@ export default {
         if (data.length > 0) {
           this.$vs.loading.close();
           this.availableConsultants = data;
-          console.log(this.availableConsultants);
           this.modalConsultant = true;
           return;
         }
@@ -241,7 +240,7 @@ export default {
       }
     },
 
-    confirmUser(obj) {
+    async confirmUser(obj) {
       if (this.$v.$invalid) {
         this.$vs.notify({
           title: "Atenção",
@@ -251,9 +250,10 @@ export default {
         });
         return;
       }
-      this.$vs.loading();
-      this.getUserWhere(obj).then((res) => {
-        const { data } = res;
+      try {
+        this.$vs.loading();
+        const result = await Users.getWhere(obj);
+        const { data } = result;
         if (data.length === 0) {
           this.isRegistred = false;
           this.modalUserRegistred = true;
@@ -271,7 +271,9 @@ export default {
         this.modalUserRegistred = false;
         this.isClient = true;
         this.$vs.loading.close();
-      });
+      } catch (e) {
+        throw new Error(e);
+      }
     },
 
     schedulesSteps() {
@@ -284,18 +286,8 @@ export default {
       return this.serviceDate && this.serviceStartHour && this.serviceDuration;
     },
 
-    async getUserWhere(obj) {
-      try {
-        const result = await Users.getWhere(obj);
-        return result;
-      } catch (error) {
-        throw new Error(error);
-      }
-    },
-
     async createSchedule() {
       try {
-        console.log(this.formSubmit);
         const result = await Schedules.create(this.formSubmit);
         if (result) {
           this.$vs.notify({
