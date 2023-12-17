@@ -81,7 +81,6 @@ export class UserController {
 
     async findAvailableConsultant(req: Request, res: Response) {
         const { params } = req;
-        console.log('params', req)
         const schedule: DateSchedule = {
             dateAndHourStart: params.startSchedule,
             dateAndHourFinish: params.finishSchedule,
