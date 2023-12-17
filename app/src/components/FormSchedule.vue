@@ -222,10 +222,10 @@ export default {
         this.$vs.loading();
         const result = await Users.findAvailableConsultant(this.formSubmit);
         const { data } = result;
-        this.availableConsultants = [];
         if (data.length > 0) {
           this.$vs.loading.close();
           this.availableConsultants = data;
+          console.log(this.availableConsultants);
           this.modalConsultant = true;
           return;
         }
@@ -268,6 +268,7 @@ export default {
           this.$vs.loading.close();
           return;
         }
+        this.modalUserRegistred = false;
         this.isClient = true;
         this.$vs.loading.close();
       });
