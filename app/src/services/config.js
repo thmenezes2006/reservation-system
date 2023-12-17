@@ -1,9 +1,13 @@
 import axios from 'axios'
 
-let api = `${process.env.VUE_APP_IP_API}`
+const apiUrl = process.env.VUE_APP_IP_API;
+const restPort = process.env.VUE_APP_PORT_REST;
 
-if (process.env.VUE_APP_PORT_REST) {
-    api = api + `:${process.env.VUE_APP_PORT_REST}`
+
+let api = apiUrl || '';
+
+if (restPort) {
+    api += `:${restPort}`;
 }
 
 export const http = axios.create({

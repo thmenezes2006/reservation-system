@@ -8,9 +8,7 @@ export default {
     getWhere: async (obj) => {
         const key = Object.keys(obj)[0];
         const value = obj[key];
-        console.log('http', http);
         const users = await http.get(`/users/${key}/${value}`)
-        console.log('users', users);
         return users
     },
     create: async (obj) => {
