@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node dist/app.js",
+    "start": "ts-node ./src/app.ts",
     "seed": "ts-node ./src/db/mongo.seeder.ts",
     "test": "jest",
+    "coverage": "npx jest --coverage  --silent",
     "build": "tsc",
-    "coverage": "npx jest --coverage  --silent"
+    "vercel-build": "echo hello"
   },
   "dependencies": {
     "@faker-js/faker": "^7.6.0",

@@ -20,3 +20,5 @@ app.use("/users", usersRoutes);
 app.use("/schedules", schedulesRoutes);
 mongoConnect();
 app.listen(port, () => console.log('Server is running on port ' + port))
+
+export default app

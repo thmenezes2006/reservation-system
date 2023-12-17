@@ -6,32 +6,32 @@ export const fakeScheduleData: Schedule[] = [
     {
         idBeneficiario: new Types.ObjectId(),
         idRepresentante: new Types.ObjectId(),
-        dateAndHourStart: new Date('2023-12-15T13:30'),
-        dateAndHourFinish: new Date('2023-12-15T15:30'),
+        dateAndHourStart: '2023-12-15T13:30',
+        dateAndHourFinish: '2023-12-15T15:30',
         createdAt: new Date(),
         updatedAt: new Date()
     },
     {
         idBeneficiario: new Types.ObjectId(),
         idRepresentante: new Types.ObjectId(),
-        dateAndHourStart: new Date('2023-12-15T15:30'),
-        dateAndHourFinish: new Date('2023-12-15T16:00'),
+        dateAndHourStart: '2023-12-15T15:30',
+        dateAndHourFinish: '2023-12-15T16:00',
         createdAt: new Date(),
         updatedAt: new Date()
     },
     {
         idBeneficiario: new Types.ObjectId(),
         idRepresentante: new Types.ObjectId(),
-        dateAndHourStart: new Date('2023-12-15T16:00'),
-        dateAndHourFinish: new Date('2023-12-15T17:00'),
+        dateAndHourStart: '2023-12-15T16:00',
+        dateAndHourFinish: '2023-12-15T17:00',
         createdAt: new Date(),
         updatedAt: new Date()
     },
     {
         idBeneficiario: new Types.ObjectId(),
         idRepresentante: new Types.ObjectId(),
-        dateAndHourStart: new Date('2023-12-15T17:00'),
-        dateAndHourFinish: new Date('2023-12-15T17:30'),
+        dateAndHourStart: '2023-12-15T17:00',
+        dateAndHourFinish: '2023-12-15T17:30',
         createdAt: new Date(),
         updatedAt: new Date()
     }
@@ -39,8 +39,8 @@ export const fakeScheduleData: Schedule[] = [
 export const updatedSchedule: Schedule = {
     idBeneficiario: new Types.ObjectId(),
     idRepresentante: new Types.ObjectId(),
-    dateAndHourStart: new Date('2023-12-15T10:30'),
-    dateAndHourFinish: new Date('2023-12-15T11:00'),
+    dateAndHourStart: '2023-12-15T10:30',
+    dateAndHourFinish: '2023-12-15T11:00',
     createdAt: new Date(),
     updatedAt: new Date()
 }
