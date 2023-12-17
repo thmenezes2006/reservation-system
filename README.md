@@ -4,6 +4,11 @@
 
 O BPReserva é um sistema de agendamentos projetado para dois tipos de usuários: "Beneficiário" (cliente) e "Representante" (corretor de seguros). Os beneficiários podem agendar encontros com representantes disponíveis na data e horário desejados, garantindo que o representante não tenha agendamentos no mesmo período. O sistema impõe uma duração mínima de 30 minutos e máxima de 2 horas para os agendamentos.
 
+## Aplicação em ambiente de produção
+
+- [BP-Reserva](https://reservation-system-rho.vercel.app)
+
+
 ## Pré-requisitos
 
 Certifique-se de ter as seguintes tecnologias instaladas:
